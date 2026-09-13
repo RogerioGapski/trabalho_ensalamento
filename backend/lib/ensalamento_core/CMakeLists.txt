@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_library(ensalamento_core STATIC
     src/Validador.cpp
     src/RastreadorAlteracoes.cpp
+    src/IndiceAdequacao.cpp
+    src/Alocador.cpp
 )
 
 target_include_directories(ensalamento_core PUBLIC

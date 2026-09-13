@@ -2,12 +2,23 @@
 #define ENSALAMENTO_CORE_VALIDADOR_HPP
 
 #include "ensalamento/Tipos.hpp"
+#include <vector>
 
 namespace ensalamento {
 
 class Validador {
 public:
     static ResultadoValidacao validar(const EstadoEnsalamento& estado);
+
+    static std::vector<Violacao> verificarRestricoesIntrinsecas(const Sala& sala, const Turma& turma);
+
+    static std::vector<Violacao> verificarConflitosDinamicos(
+        const EstadoEnsalamento& estado,
+        const Encontro& encontroCandidato,
+        const Sala& salaCandidata,
+        const Turma& turmaCandidata,
+        const std::vector<Alocacao>& alocacoesConsideradasAtuais
+    );
 
 private:
     static void validarRB01ChoqueDeSala(const EstadoEnsalamento& estado, std::vector<Violacao>& violacoes);

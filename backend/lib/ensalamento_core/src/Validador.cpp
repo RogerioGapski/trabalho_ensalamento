@@ -1,4 +1,4 @@
-#include "ensalamento/Validador.hpp"
+#include "include/ensalamento/Validador.hpp"
 #include <sstream>
 #include <algorithm>
 
@@ -405,6 +405,130 @@ void Validador::validarRB07ChoqueDeProfessor(const EstadoEnsalamento& estado, st
             }
         }
     }
+}
+
+std::vector<Violacao> Validador::verificarRestricoesIntrinsecas(const Sala& sala, const Turma& turma) {
+    std::vector<Violacao> violacoes;
+
+    if (sala.status == StatusSala::EmManutencao || sala.status == StatusSala::Desativada) {
+        std::ostringstream mensagem;
+        mensagem << "Sala '" << sala.nome << "' esta com status '" << paraTexto(sala.status)
+                  << "' e nao pode receber novos encontros";
+        violacoes.push_back(Violacao{ CodigoRegra::RB04, mensagem.str(), { sala.id } });
+    }
+
+    int tamanhoParaCalculo = turma.tamanhoParaCalculo();
+    if (tamanhoParaCalculo > sala.capacidadeRegular) {
+        std::ostringstream mensagem;
+        mensagem << "Capacidade da sala '" << sala.nome << "' (" << sala.capacidadeRegular
+                  << ") e insuficiente para a turma '" << turma.id << "' com tamanho calculado de "
+                  << tamanhoParaCalculo;
+        violacoes.push_back(Violacao{ CodigoRegra::RB03, mensagem.str(), { turma.id, sala.id } });
+    }
+
+    if (turma.necessidades.tipoSalaObrigatorio.has_value() && sala.tipo != turma.necessidades.tipoSalaObrigatorio.value()) {
+        std::ostringstream mensagem;
+        mensagem << "Sala '" << sala.nome << "' e do tipo '" << paraTexto(sala.tipo)
+                  << "', mas a turma '" << turma.id << "' exige o tipo '"
+                  << paraTexto(turma.necessidades.tipoSalaObrigatorio.value()) << "'";
+        violacoes.push_back(Violacao{ CodigoRegra::RB05, mensagem.str(), { turma.id, sala.id } });
+    }
+
+    std::vector<std::string> recursosFaltantes;
+    for (const auto& recurso : turma.necessidades.recursosObrigatorios) {
+        if (sala.recursos.find(recurso) == sala.recursos.end()) {
+            recursosFaltantes.push_back(recurso);
+        }
+    }
+
+    if (!recursosFaltantes.empty()) {
+        std::ostringstream mensagem;
+        mensagem << "Sala '" << sala.nome << "' nao possui os recursos obrigatorios da turma '" << turma.id << "': ";
+        for (std::size_t i = 0; i < recursosFaltantes.size(); ++i) {
+            mensagem << recursosFaltantes[i];
+            if (i + 1 < recursosFaltantes.size()) {
+                mensagem << ", ";
+            }
+        }
+
+        std::vector<std::string> idsRelacionados = { turma.id, sala.id };
+        for (const auto& recurso : recursosFaltantes) {
+            idsRelacionados.push_back(recurso);
+        }
+
+        violacoes.push_back(Violacao{ CodigoRegra::RB05, mensagem.str(), idsRelacionados });
+    }
+
+    if (turma.necessidades.acessibilidadeSolicitada && !sala.acessivel) {
+        std::ostringstream mensagem;
+        mensagem << "Turma '" << turma.id << "' solicitou acessibilidade, tratada como obrigatoria, mas a sala '"
+                  << sala.nome << "' nao e acessivel";
+        violacoes.push_back(Violacao{ CodigoRegra::RB06, mensagem.str(), { turma.id, sala.id } });
+    }
+
+    return violacoes;
+}
+
+std::vector<Violacao> Validador::verificarConflitosDinamicos(
+    const EstadoEnsalamento& estado,
+    const Encontro& encontroCandidato,
+    const Sala& salaCandidata,
+    const Turma& turmaCandidata,
+    const std::vector<Alocacao>& alocacoesConsideradasAtuais
+) {
+    std::vector<Violacao> violacoes;
+
+    for (const auto& alocacaoExistente : alocacoesConsideradasAtuais) {
+        if (alocacaoExistente.status == StatusAlocacao::Cancelada) {
+            continue;
+        }
+
+        const Encontro* encontroExistente = encontrarEncontro(estado, alocacaoExistente.encontroId);
+        if (encontroExistente == nullptr) {
+            continue;
+        }
+
+        if (encontroExistente->id == encontroCandidato.id) {
+            continue;
+        }
+
+        if (encontroExistente->diaSemana != encontroCandidato.diaSemana) {
+            continue;
+        }
+
+        if (!horariosSobrepoem(encontroExistente->horaInicio, encontroExistente->horaFim, encontroCandidato.horaInicio, encontroCandidato.horaFim)) {
+            continue;
+        }
+
+        if (alocacaoExistente.salaId == salaCandidata.id) {
+            std::ostringstream mensagem;
+            mensagem << "Sala '" << salaCandidata.nome << "' ja possui o encontro '" << encontroExistente->id
+                      << "' no mesmo horario";
+            violacoes.push_back(Violacao{
+                CodigoRegra::RB01,
+                mensagem.str(),
+                { encontroExistente->id, encontroCandidato.id, salaCandidata.id }
+            });
+        }
+
+        const Turma* turmaExistente = encontrarTurma(estado, encontroExistente->turmaId);
+        if (turmaExistente != nullptr && turmaExistente->id != turmaCandidata.id) {
+            for (const auto& professorId : turmaCandidata.professoresIds) {
+                if (turmaExistente->professoresIds.find(professorId) != turmaExistente->professoresIds.end()) {
+                    std::ostringstream mensagem;
+                    mensagem << "Professor '" << professorId << "' ja possui o encontro '" << encontroExistente->id
+                              << "' no mesmo horario";
+                    violacoes.push_back(Violacao{
+                        CodigoRegra::RB07,
+                        mensagem.str(),
+                        { encontroExistente->id, encontroCandidato.id, professorId }
+                    });
+                }
+            }
+        }
+    }
+
+    return violacoes;
 }
 
 ResultadoValidacao Validador::validar(const EstadoEnsalamento& estado) {

@@ -28,20 +28,21 @@ $RECYCLE.BIN/
 *.code-workspace
 
 backend/build/
+backend/**/build/
 backend/cmake-build-*/
 backend/out/
 backend/bin/
-backend/lib/
-backend/obj/
+backend/**/*.a
+backend/**/*.so
+backend/**/*.so.*
+backend/**/*.dylib
+backend/**/*.dll
+backend/**/*.lib
+backend/**/*.obj
+backend/**/*.o
 
 *.o
 *.obj
-*.so
-*.so.*
-*.dylib
-*.dll
-*.a
-*.lib
 *.exe
 *.out
 *.app
@@ -55,9 +56,6 @@ compile_commands.json
 CTestTestfile.cmake
 _deps/
 Testing/
-
-Makefile
-!backend/Makefile.in
 
 build.ninja
 .ninja_deps

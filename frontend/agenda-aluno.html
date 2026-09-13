@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ensalamento — Minha agenda</title>
+    <link rel="stylesheet" href="css/estilo.css" />
+    <script src="js/configuracao.js"></script>
+</head>
+<body>
+    <header class="cabecalho" id="cabecalho-app"></header>
+
+    <main class="contentor">
+        <div class="cartao" id="cartao-turma-atual">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                <div>
+                    <p style="margin: 0; color: var(--cor-texto-suave); font-size: 0.85rem;">Turma selecionada</p>
+                    <p style="margin: 0; font-weight: 700;" id="texto-turma-selecionada">Carregando...</p>
+                </div>
+                <a class="botao" href="selecionar-turma.html">Trocar turma</a>
+            </div>
+        </div>
+
+        <div class="abas" role="tablist" aria-label="Modo de visualização">
+            <button class="botao" role="tab" aria-selected="true" id="aba-dia" type="button">Hoje</button>
+            <button class="botao" role="tab" aria-selected="false" id="aba-semana" type="button">Semana</button>
+        </div>
+
+        <div class="cartao" id="area-agenda">
+            <p class="mensagem-estado">Carregando agenda...</p>
+        </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/autenticacao.js"></script>
+    <script src="js/preferenciaTurma.js"></script>
+    <script src="js/componentesCabecalho.js"></script>
+    <script src="js/paginaAgendaAluno.js"></script>
+</body>
+</html>

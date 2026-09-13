@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ensalamento — Selecionar turma</title>
+    <link rel="stylesheet" href="css/estilo.css" />
+    <script src="js/configuracao.js"></script>
+</head>
+<body>
+    <header class="cabecalho" id="cabecalho-app"></header>
+
+    <main class="contentor contentor--estreito">
+        <div class="cartao">
+            <h1 style="margin-top: 0;">Escolha sua turma</h1>
+            <p style="color: var(--cor-texto-suave);">Essa escolha será lembrada neste navegador durante o período letivo atual.</p>
+
+            <div class="campo">
+                <label for="campo-busca-turma">Buscar por código, disciplina ou turno</label>
+                <input type="text" id="campo-busca-turma" placeholder="Ex.: ENG-101 ou Cálculo I" autocomplete="off" />
+            </div>
+
+            <ul class="lista-resultados" id="lista-resultados-turmas"></ul>
+            <p id="mensagem-estado-busca" class="mensagem-estado" hidden></p>
+        </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/autenticacao.js"></script>
+    <script src="js/preferenciaTurma.js"></script>
+    <script src="js/componentesCabecalho.js"></script>
+    <script src="js/paginaSelecionarTurma.js"></script>
+</body>
+</html>

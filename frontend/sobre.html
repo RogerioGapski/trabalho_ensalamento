@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sobre o projeto — Ensalamento</title>
+    <link rel="stylesheet" href="css/estilo.css" />
+    <script src="js/configuracao.js"></script>
+</head>
+<body>
+    <header class="cabecalho">
+        <a class="cabecalho__marca" href="index.html"><span aria-hidden="true">🏫</span> Ensalamento</a>
+    </header>
+
+    <main class="contentor">
+        <div class="cartao">
+            <p><strong>Nota:</strong> este é um trabalho acadêmico e não é uma publicação institucional oficial.</p>
+            <p id="texto-instituicao"></p>
+            <p id="texto-disciplina"></p>
+        </div>
+
+        <div class="cartao">
+            <h2>Participantes do grupo</h2>
+            <ul id="lista-participantes">
+                <li>Substitua pelo nome do integrante — Papel: backend em C++</li>
+                <li>Substitua pelo nome do integrante — Papel: frontend</li>
+                <li>Substitua pelo nome do integrante — Papel: infraestrutura e banco de dados</li>
+                <li>Substitua pelo nome do integrante — Papel: documentação e testes</li>
+            </ul>
+        </div>
+
+        <div class="cartao">
+            <h2>Problema atacado e objetivos</h2>
+            <p>
+                O ensalamento envolve informações que mudam a cada semestre e, por vezes, durante o próprio período
+                letivo. Sem uma fonte central, alunos, professores e a coordenação podem consultar versões
+                diferentes do horário, gerando conflitos de sala e informações desatualizadas. Este sistema
+                centraliza os dados de turmas, horários e salas, detecta conflitos antes da publicação e mantém
+                histórico de alterações.
+            </p>
+        </div>
+
+        <div class="cartao">
+            <h2>Metodologia e regras implementadas</h2>
+            <p>O núcleo de cálculo (escrito em C++) implementa as seguintes regras de negócio:</p>
+            <ul>
+                <li>RB-01: uma sala não recebe dois encontros sobrepostos.</li>
+                <li>RB-02: uma turma não ocupa duas salas diferentes no mesmo encontro, exceto com divisão cadastrada.</li>
+                <li>RB-03: a capacidade da sala deve ser ≥ ao tamanho de cálculo da turma.</li>
+                <li>RB-04: salas em manutenção ou desativadas não recebem novos encontros.</li>
+                <li>RB-05: todos os recursos obrigatórios da turma devem existir na sala escolhida.</li>
+                <li>RB-06: exigência de acessibilidade é sempre tratada como obrigatória.</li>
+                <li>RB-07: um professor não pode estar em dois encontros sobrepostos.</li>
+                <li>RB-08: alterações em turma, horário, tamanho ou sala invalidam verificações anteriores relacionadas.</li>
+            </ul>
+            <p>
+                A escolha de sala entre as opções válidas usa um índice de adequação
+                <em>I = w₁·f(sobra) + w₂·[mesma sala] + w₃·[mesmo prédio] + w₄·[campus preferido] + w₅·[prédio preferido]</em>,
+                em que <em>f(sobra) = 1 / (1 + sobra_de_capacidade)</em> favorece a menor sobra de espaço, e os pesos
+                <em>w₁..w₅</em> são configuráveis pelo administrador. Essa formulação segue o critério do documento-base
+                da disciplina (seção 6.9.2), que permite heurística simples desde que as restrições obrigatórias sejam
+                respeitadas e as escolhas sejam explicadas.
+            </p>
+        </div>
+
+        <div class="cartao">
+            <h2>Justificativa da licença</h2>
+            <p>
+                O projeto adota a licença MIT pela permissividade de uso e distribuição, compatibilidade com
+                bibliotecas de terceiros usadas na camada de autenticação e API, simplicidade jurídica para
+                avaliação por instituições parceiras, e por ser um padrão amplamente adotado em ferramentas
+                educacionais de código aberto. A justificativa completa está no arquivo <code>LICENSE</code> do
+                repositório.
+            </p>
+        </div>
+
+        <div class="cartao">
+            <h2>Justificativa da escolha de front-end</h2>
+            <p>
+                Optamos por HTML5, CSS3 e JavaScript vanilla, sem framework. Por essa escolha não envolver adoção de
+                framework, esta seção não está sujeita à exigência de justificativa prevista no documento-base da
+                disciplina — ainda assim, documentamos a decisão: o escopo de telas é pequeno (login, seleção de
+                turma, agenda do aluno, agenda do professor, dois painéis administrativos), o hospedeiro é o GitHub
+                Pages (arquivos estáticos, sem etapa de build), e a ausência de framework elimina completamente o
+                custo de bundle de um framework de UI e o tempo de download e parse correspondente.
+            </p>
+        </div>
+
+        <div class="cartao">
+            <h2>Resultados obtidos</h2>
+            <p>
+                Esta seção será preenchida com capturas de tela e métricas reais (tempo de geração do ensalamento,
+                taxa de turmas alocadas automaticamente) obtidas com dados de demonstração, à medida que os módulos
+                de administração forem concluídos.
+            </p>
+        </div>
+
+        <div class="cartao">
+            <h2>Discussão ética</h2>
+            <p>
+                Os dados de necessidade de acessibilidade e de recursos são fornecidos pela própria coordenação e
+                tratados como obrigatórios (RB-06), o que reduz o risco de negligência sistemática dessas
+                necessidades. Um viés possível está na ordenação de turmas por "dificuldade de alocação": turmas
+                grandes ou com muitas exigências tendem a ser processadas primeiro, o que privilegia sua alocação
+                em detrimento de turmas menores processadas por último em cenários de escassez de salas. Um erro do
+                sistema (por exemplo, uma sala publicada incorretamente) pode levar alunos e professores a se
+                deslocarem para o local errado; por isso, toda alteração é registrada com autor, data e motivo
+                (RB-12), permitindo auditoria e correção rápida.
+            </p>
+        </div>
+
+        <div class="cartao">
+            <h2>Limitações conhecidas</h2>
+            <ul>
+                <li>Não há otimização matemática global — o algoritmo é uma heurística gulosa (ver seção 6.9 do memorial).</li>
+                <li>A coluna de status "em manutenção" da sala ainda depende de uma migration adicional no banco.</li>
+                <li>Os painéis de coordenador e administrador ainda são esqueletos, sem os fluxos completos de RF-15 a RF-34.</li>
+            </ul>
+        </div>
+
+        <div class="cartao">
+            <h2>Conclusão e referências</h2>
+            <p>
+                O sistema atende, na versão atual, aos requisitos de autenticação federada, seleção e consulta de
+                turma pelo aluno, e consulta de agenda pelo professor, com o núcleo de regras de negócio e o
+                algoritmo de alocação implementados e testados em C++. As referências específicas de cada fórmula e
+                regra estão descritas nesta própria página.
+            </p>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById("texto-instituicao").textContent =
+            "Instituição: " + window.CONFIGURACAO_ENSALAMENTO.nomeInstituicao;
+        document.getElementById("texto-disciplina").textContent =
+            "Disciplina: " + window.CONFIGURACAO_ENSALAMENTO.nomeDisciplina + " — " + window.CONFIGURACAO_ENSALAMENTO.anoLetivoExibicao;
+    </script>
+</body>
+</html>

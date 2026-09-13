@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ensalamento — Painel do coordenador</title>
+    <link rel="stylesheet" href="css/estilo.css" />
+    <script src="js/configuracao.js"></script>
+</head>
+<body>
+    <header class="cabecalho" id="cabecalho-app"></header>
+
+    <main class="contentor">
+        <div class="cartao">
+            <h1 style="margin-top: 0;">Painel do coordenador</h1>
+            <p style="color: var(--cor-texto-suave);">
+                Aqui você vai acompanhar suas turmas, registrar necessidades e enviar solicitações para o administrador.
+            </p>
+            <p class="mensagem-estado">Esta área será detalhada em um próximo incremento do projeto (RF-15 a RF-20).</p>
+        </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/autenticacao.js"></script>
+    <script src="js/componentesCabecalho.js"></script>
+    <script>
+        (async function () {
+            const usuario = await Autenticacao.exigirAutenticacaoOuRedirecionar(["coord"]);
+            if (usuario) {
+                montarCabecalho("cabecalho-app", usuario.nome, usuario.papel);
+            }
+        })();
+    </script>
+</body>
+</html>

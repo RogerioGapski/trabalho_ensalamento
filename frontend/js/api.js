@@ -54,6 +54,9 @@ const ClienteApi = (function () {
         encerrarSessao: function () {
             return requisitar("/api/auth/logout", { method: "POST" });
         },
+        buscarPeriodoLetivoAtual: function () {
+            return requisitar("/api/periodos/atual", { method: "GET" });
+        },
         buscarTurmas: function (textoBusca) {
             const parametro = encodeURIComponent(textoBusca || "");
             return requisitar("/api/turmas/busca?q=" + parametro, { method: "GET" });

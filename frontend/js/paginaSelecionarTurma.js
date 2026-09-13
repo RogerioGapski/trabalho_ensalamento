@@ -11,10 +11,21 @@
     const mensagemEstado = document.getElementById("mensagem-estado-busca");
 
     let temporizadorBusca = null;
+    let periodoLetivoAtual = null;
 
     function exibirMensagem(texto) {
         mensagemEstado.textContent = texto;
         mensagemEstado.hidden = texto === "";
+    }
+
+    async function carregarPeriodoLetivoAtual() {
+        try {
+            periodoLetivoAtual = await ClienteApi.buscarPeriodoLetivoAtual();
+            campoBusca.disabled = false;
+            campoBusca.focus();
+        } catch (erro) {
+            exibirMensagem("Não há período letivo ativo no momento. Tente novamente mais tarde.");
+        }
     }
 
     function renderizarResultados(turmas) {
@@ -55,7 +66,9 @@
             return;
         }
 
-        PreferenciaTurma.salvar(usuario.id, turma.periodoLetivoId, turma.id, turma.codigo + " — " + turma.disciplina);
+        PreferenciaTurma.salvar(usuario.id, periodoLetivoAtual.id, turma.id, turma.codigo + " — " + turma.disciplina);
+        PreferenciaTurma.limparPreferenciasDeOutrosPeriodos(usuario.id, periodoLetivoAtual.id);
+
         window.location.href = "agenda-aluno.html";
     }
 
@@ -83,5 +96,5 @@
         }, 300);
     });
 
-    campoBusca.focus();
+    await carregarPeriodoLetivoAtual();
 })();

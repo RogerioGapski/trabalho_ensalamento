@@ -27,7 +27,7 @@ const Autenticacao = (function () {
 
     function redirecionarConformePapel(papel) {
         if (papel === "aluno") {
-            window.location.href = "selecionar-turma.html";
+            window.location.href = "agenda-aluno.html";
         } else if (papel === "prof") {
             window.location.href = "agenda-professor.html";
         } else if (papel === "coord") {

@@ -6,8 +6,18 @@
 
     montarCabecalho("cabecalho-app", usuario.nome, usuario.papel);
 
-    const periodoLetivoIdAtual = document.body.getAttribute("data-periodo-letivo-id") || "atual";
-    const preferencia = PreferenciaTurma.obter(usuario.id, periodoLetivoIdAtual);
+    let periodoLetivoAtual = null;
+
+    try {
+        periodoLetivoAtual = await ClienteApi.buscarPeriodoLetivoAtual();
+    } catch (erro) {
+        document.getElementById("area-agenda").innerHTML =
+            '<p class="mensagem-estado">Não há período letivo ativo no momento.</p>';
+        document.getElementById("texto-turma-selecionada").textContent = "—";
+        return;
+    }
+
+    const preferencia = PreferenciaTurma.obter(usuario.id, periodoLetivoAtual.id);
 
     if (!preferencia) {
         window.location.href = "selecionar-turma.html";
@@ -32,7 +42,6 @@
             return;
         }
 
-        const agora = new Date();
         let html = "";
 
         encontros.forEach(function (encontro) {
@@ -76,7 +85,7 @@
             if (erro.status === 404) {
                 areaAgenda.innerHTML = '<p class="mensagem-estado">Ainda não há ensalamento publicado para este período.</p>';
             } else if (erro.status === 409) {
-                PreferenciaTurma.remover(usuario.id, periodoLetivoIdAtual);
+                PreferenciaTurma.remover(usuario.id, periodoLetivoAtual.id);
                 window.location.href = "selecionar-turma.html";
             } else {
                 areaAgenda.innerHTML = '<p class="mensagem-estado">Não foi possível carregar a agenda agora.</p>';

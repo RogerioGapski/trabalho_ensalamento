@@ -1,0 +1,83 @@
+MIT License
+
+Copyright (c) 2026 Projeto Ensalamento Prática Profissional Desenvolvimento
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+------------------------------------------------------------------------------
+JUSTIFICATIVA DETALHADA DA ESCOLHA DA LICENÇA MIT
+------------------------------------------------------------------------------
+
+Este projeto adota a licença MIT pelos seguintes motivos:
+
+1. Permissividade máxima com risco jurídico mínimo
+   A MIT é uma licença permissiva: qualquer pessoa pode usar, copiar,
+   modificar, mesclar, publicar, distribuir, sublicenciar e/ou vender cópias
+   do software, tanto em projetos privados quanto proprietários, desde que o
+   aviso de copyright e o texto da licença sejam mantidos. Isso favorece a
+   adoção do sistema de ensalamento por instituições de ensino, empresas de
+   tecnologia educacional e desenvolvedores independentes sem impor barreiras
+   contratuais complexas.
+
+2. Compatibilidade com outras licenças
+   A MIT é compatível com a grande maioria das licenças de código aberto
+   existentes (Apache 2.0, GPL, BSD, LGPL, etc.), o que facilita a integração
+   de bibliotecas de terceiros no backend em C++ (por exemplo, bibliotecas de
+   otimização/alocação de recursos, frameworks HTTP, ORMs) e no frontend
+   (frameworks JavaScript/TypeScript, bibliotecas de UI), sem gerar conflitos
+   de licenciamento em cadeia (o chamado "copyleft viral" presente em
+   licenças como a GPL).
+
+3. Simplicidade e clareza jurídica
+   O texto da MIT é curto, direto e amplamente compreendido tanto por
+   desenvolvedores quanto por departamentos jurídicos de instituições
+   parceiras. Isso reduz a fricção na avaliação de compliance quando o
+   projeto for avaliado para uso em escolas, universidades ou secretarias de
+   educação, que frequentemente têm processos de auditoria de software antes
+   da adoção de uma ferramenta de terceiros.
+
+4. Incentivo à colaboração aberta
+   Por não exigir que trabalhos derivados sejam liberados sob a mesma
+   licença (diferentemente de licenças copyleft), a MIT incentiva
+   contribuições externas, forks e adaptações regionais do sistema de
+   ensalamento (por exemplo, adaptações para diferentes grades curriculares,
+   tipos de sala, ou regras de alocação específicas de cada instituição) sem
+   que os contribuidores se sintam obrigados a tornar público todo o código
+   de sua adaptação.
+
+5. Proteção legal mínima, porém suficiente
+   A cláusula de isenção de garantias ("AS IS") protege os mantenedores do
+   projeto contra reivindicações de responsabilidade civil decorrentes de
+   eventuais falhas no algoritmo de ensalamento (por exemplo, conflitos de
+   horário não detectados), o que é especialmente relevante em um sistema
+   que pode ser usado para apoiar decisões operacionais reais em
+   instituições de ensino.
+
+6. Padrão de mercado para projetos educacionais e ferramentas internas
+   Grande parte do ecossistema de ferramentas educacionais de código aberto
+   (bibliotecas de agendamento, otimização de horários, timetabling) utiliza
+   licenças permissivas como MIT ou Apache 2.0, o que torna a MIT uma escolha
+   alinhada às expectativas da comunidade e facilita eventual publicação do
+   projeto em repositórios públicos (GitHub, GitLab) e em gerenciadores de
+   pacotes (npm, vcpkg, Conan) tanto para o frontend quanto para o backend
+   em C++.
+
+Por esses motivos, a licença MIT foi escolhida como a que melhor equilibra
+liberdade de uso, proteção legal dos mantenedores e potencial de adoção e
+colaboração para o Projeto Ensalamento.

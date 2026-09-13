@@ -61,13 +61,11 @@ const ClienteApi = (function () {
             const parametro = encodeURIComponent(textoBusca || "");
             return requisitar("/api/turmas/busca?q=" + parametro, { method: "GET" });
         },
-        buscarAgendaAluno: function (turmaId, data) {
-            return requisitar("/api/agenda/aluno?turma_id=" + encodeURIComponent(turmaId) + "&data=" + encodeURIComponent(data), {
-                method: "GET"
-            });
+        buscarAgendaSemanalAluno: function (turmaId) {
+            return requisitar("/api/agenda/aluno?turma_id=" + encodeURIComponent(turmaId), { method: "GET" });
         },
-        buscarAgendaProfessor: function (data) {
-            return requisitar("/api/agenda/professor?data=" + encodeURIComponent(data), { method: "GET" });
+        buscarAgendaSemanalProfessor: function () {
+            return requisitar("/api/agenda/professor", { method: "GET" });
         },
         buscarDetalhesSala: function (salaId) {
             return requisitar("/api/salas/" + encodeURIComponent(salaId), { method: "GET" });

@@ -212,6 +212,7 @@ select:focus-visible,
 .selo--alterada {
     background-color: #fef3c7;
     color: var(--cor-alerta);
+    cursor: help;
 }
 
 .encontro {
@@ -246,6 +247,12 @@ select:focus-visible,
     color: var(--cor-texto-suave);
     font-size: 0.9rem;
     margin: 0;
+}
+
+.encontro__data-atualizacao {
+    color: var(--cor-alerta);
+    font-size: 0.8rem;
+    margin: 0.3rem 0 0;
 }
 
 .abas {
@@ -300,6 +307,29 @@ select:focus-visible,
     justify-content: center;
     gap: 0.6rem;
     width: 100%;
+}
+
+.agenda-semanal__dia {
+    background-color: var(--cor-superficie);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio-borda);
+    box-shadow: var(--sombra-cartao);
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.agenda-semanal__dia h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+}
+
+.agenda-semanal__dia--hoje {
+    border-color: var(--cor-primaria);
+    border-width: 2px;
+}
+
+.agenda-semanal__dia--hoje h3 {
+    color: var(--cor-primaria);
 }
 
 @media (max-width: 480px) {

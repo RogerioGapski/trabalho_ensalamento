@@ -8,3 +8,4 @@ enable_testing()
 
 add_subdirectory(lib/ensalamento_core)
 add_subdirectory(tests)
+add_subdirectory(api)

@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.16)
+
+add_executable(testes_validador TestesValidador.cpp)
+
+target_link_libraries(testes_validador PRIVATE ensalamento_core)
+
+add_test(NAME testes_validador COMMAND testes_validador)

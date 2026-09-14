@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ensalamento — Importar dados</title>
+    <link rel="stylesheet" href="css/estilo.css" />
+    <script src="js/configuracao.js"></script>
+</head>
+<body>
+    <header class="cabecalho" id="cabecalho-app"></header>
+
+    <main class="contentor">
+        <div class="cartao">
+            <h1 style="margin-top: 0;">Importar dados via CSV</h1>
+
+            <div class="campo">
+                <label for="campo-tipo-importacao">Tipo de dado</label>
+                <select id="campo-tipo-importacao">
+                    <option value="salas">Salas</option>
+                    <option value="usuarios">Usuários (professores, coordenadores, administradores)</option>
+                    <option value="turmas">Turmas</option>
+                    <option value="horarios">Horários (encontros)</option>
+                </select>
+            </div>
+
+            <div class="campo">
+                <label for="campo-arquivo-csv">Arquivo CSV</label>
+                <input type="file" id="campo-arquivo-csv" accept=".csv,text/csv" />
+            </div>
+
+            <button class="botao botao--primario" id="botao-validar" type="button" disabled>Validar arquivo</button>
+        </div>
+
+        <div class="cartao" id="cartao-resumo" hidden>
+            <h2 style="margin-top: 0;">Resumo da validação</h2>
+            <div class="grade-resumo-importacao" id="grade-resumo-importacao"></div>
+
+            <div id="area-relatorio-erros"></div>
+
+            <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <button class="botao" id="botao-baixar-relatorio" type="button">Baixar relatório de erros (.csv)</button>
+                <button class="botao botao--primario" id="botao-confirmar-importacao" type="button">Confirmar importação</button>
+            </div>
+
+            <p class="mensagem-estado" id="mensagem-pos-confirmacao" hidden></p>
+        </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/autenticacao.js"></script>
+    <script src="js/componentesCabecalho.js"></script>
+    <script src="js/paginaImportarDados.js"></script>
+</body>
+</html>

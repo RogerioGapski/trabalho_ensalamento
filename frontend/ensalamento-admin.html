@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ensalamento — Gerar e publicar</title>
+    <link rel="stylesheet" href="css/estilo.css" />
+    <script src="js/configuracao.js"></script>
+</head>
+<body>
+    <header class="cabecalho" id="cabecalho-app"></header>
+
+    <main class="contentor">
+        <div class="cartao">
+            <h1 style="margin-top: 0;">Gerar proposta de ensalamento</h1>
+            <p style="color: var(--cor-texto-suave);">
+                A proposta é gerada como rascunho. Você pode ajustar manualmente cada encontro antes de publicar.
+            </p>
+            <button class="botao botao--primario" id="botao-gerar-proposta" type="button">Gerar proposta</button>
+        </div>
+
+        <div class="cartao" id="cartao-resumo-alocacao" hidden>
+            <div class="grade-resumo-importacao" id="grade-resumo-alocacao"></div>
+        </div>
+
+        <div id="lista-turmas-alocacao"></div>
+
+        <div class="cartao" id="cartao-publicacao" hidden>
+            <h2 style="margin-top: 0;">Publicar versão</h2>
+            <div class="campo">
+                <label for="campo-descricao-publicacao">Descrição curta da versão</label>
+                <input type="text" id="campo-descricao-publicacao" placeholder="Ex.: Ensalamento inicial do semestre 2026/2" />
+            </div>
+            <p class="mensagem-erro" id="mensagem-erro-publicacao" hidden></p>
+            <button class="botao botao--primario" id="botao-publicar" type="button">Publicar versão</button>
+        </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/autenticacao.js"></script>
+    <script src="js/componentesCabecalho.js"></script>
+    <script src="js/paginaEnsalamentoAdmin.js"></script>
+</body>
+</html>

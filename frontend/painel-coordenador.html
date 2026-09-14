@@ -12,24 +12,29 @@
 
     <main class="contentor">
         <div class="cartao">
-            <h1 style="margin-top: 0;">Painel do coordenador</h1>
+            <h1 style="margin-top: 0;">Minhas turmas</h1>
             <p style="color: var(--cor-texto-suave);">
-                Aqui você vai acompanhar suas turmas, registrar necessidades e enviar solicitações para o administrador.
+                Informe tamanho, necessidades obrigatórias e preferências de cada turma. Depois de enviar, a turma
+                fica bloqueada para edição até ser devolvida pelo administrador.
             </p>
-            <p class="mensagem-estado">Esta área será detalhada em um próximo incremento do projeto (RF-15 a RF-20).</p>
         </div>
+
+        <div id="lista-turmas-coordenador"></div>
     </main>
+
+    <div class="sobreposicao-modal" id="sobreposicao-modal" hidden>
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="titulo-modal-turma">
+            <div class="modal__cabecalho">
+                <h2 id="titulo-modal-turma">Necessidades da turma</h2>
+                <button class="botao" id="botao-fechar-modal" type="button" aria-label="Fechar">✕</button>
+            </div>
+            <div class="modal__corpo" id="corpo-modal-turma"></div>
+        </div>
+    </div>
 
     <script src="js/api.js"></script>
     <script src="js/autenticacao.js"></script>
     <script src="js/componentesCabecalho.js"></script>
-    <script>
-        (async function () {
-            const usuario = await Autenticacao.exigirAutenticacaoOuRedirecionar(["coord"]);
-            if (usuario) {
-                montarCabecalho("cabecalho-app", usuario.nome, usuario.papel);
-            }
-        })();
-    </script>
+    <script src="js/paginaPainelCoordenador.js"></script>
 </body>
 </html>

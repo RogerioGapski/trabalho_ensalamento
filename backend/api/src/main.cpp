@@ -1,5 +1,6 @@
 #include "rotas/RotasEnsalamento.hpp"
 #include "rotas/RotasAutenticacao.hpp"
+#include "rotas/RotasCalendario.hpp"
 #include <crow.h>
 #include <cstdlib>
 #include <string>
@@ -9,6 +10,7 @@ int main() {
 
     ensalamento_api::RotasAutenticacao::registrar(aplicacao);
     ensalamento_api::RotasEnsalamento::registrar(aplicacao);
+    ensalamento_api::RotasCalendario::registrar(aplicacao);
 
     int porta = 8080;
 

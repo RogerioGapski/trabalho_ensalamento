@@ -6,6 +6,10 @@
 
     montarCabecalho("cabecalho-app", usuario.nome, usuario.papel);
 
+    ComponentesSincronizacao.renderizarBotoes("area-botao-sincronizacao", function () {
+        return SincronizacaoCalendario.montarLinksParaProfessor();
+    });
+
     const abaDia = document.getElementById("aba-dia");
     const abaSemana = document.getElementById("aba-semana");
     const areaAgenda = document.getElementById("area-agenda");

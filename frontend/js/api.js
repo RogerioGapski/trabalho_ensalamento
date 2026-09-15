@@ -109,6 +109,9 @@ const ClienteApi = (function () {
         },
         buscarMapaCampus: function () {
             return requisitar("/api/mapa/campus", { method: "GET" });
+        },
+        obterChaveCalendario: function () {
+            return requisitar("/api/calendario/chave", { method: "GET" });
         }
     };
 })();

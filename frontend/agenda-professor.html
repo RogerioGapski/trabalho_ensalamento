@@ -11,6 +11,10 @@
     <header class="cabecalho" id="cabecalho-app"></header>
 
     <main class="contentor">
+        <div class="cartao" style="display: flex; justify-content: flex-end;">
+            <div id="area-botao-sincronizacao"></div>
+        </div>
+
         <div class="abas" role="tablist" aria-label="Modo de visualização">
             <button class="botao" role="tab" aria-selected="true" id="aba-dia" type="button">Hoje</button>
             <button class="botao" role="tab" aria-selected="false" id="aba-semana" type="button">Semana</button>
@@ -26,6 +30,8 @@
     <script src="js/componentesCabecalho.js"></script>
     <script src="js/logicaAgenda.js"></script>
     <script src="js/renderizadorAgenda.js"></script>
+    <script src="js/sincronizacaoCalendario.js"></script>
+    <script src="js/componentesSincronizacao.js"></script>
     <script src="js/paginaAgendaProfessor.js"></script>
 </body>
 </html>

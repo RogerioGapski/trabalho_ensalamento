@@ -34,9 +34,11 @@ add_executable(ensalamento_api
     src/db/RepositorioVersao.cpp
     src/db/RepositorioMetricas.cpp
     src/db/RepositorioMapa.cpp
+    src/db/RepositorioAgendaIcs.cpp
     src/json/SerializadorRelatorio.cpp
     src/rotas/RotasEnsalamento.cpp
     src/rotas/RotasAutenticacao.cpp
+    src/rotas/RotasCalendario.cpp
     src/auth/Base64Url.cpp
     src/auth/ConversorJwkParaPem.cpp
     src/auth/ClienteHttp.cpp
@@ -46,6 +48,9 @@ add_executable(ensalamento_api
     src/auth/RepositorioUsuarios.cpp
     src/auth/GerenciadorSessao.cpp
     src/auth/CookieSessao.cpp
+    src/calendario/DataUtil.cpp
+    src/calendario/IcsBuilder.cpp
+    src/calendario/GerenciadorChaveCalendario.cpp
 )
 
 target_include_directories(ensalamento_api PRIVATE

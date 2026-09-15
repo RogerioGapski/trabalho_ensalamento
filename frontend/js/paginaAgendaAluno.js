@@ -26,6 +26,10 @@
 
     document.getElementById("texto-turma-selecionada").textContent = preferencia.turmaDescricao;
 
+    ComponentesSincronizacao.renderizarBotoes("area-botao-sincronizacao", function () {
+        return SincronizacaoCalendario.montarLinksParaAluno(preferencia.turmaId);
+    });
+
     const abaDia = document.getElementById("aba-dia");
     const abaSemana = document.getElementById("aba-semana");
     const areaAgenda = document.getElementById("area-agenda");

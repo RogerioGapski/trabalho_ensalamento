@@ -117,4 +117,51 @@ crow::json::wvalue SerializadorRelatorio::serializarResultadoValidacao(const ens
     return json;
 }
 
+crow::json::wvalue SerializadorRelatorio::serializarMetricasOcupacao(const MetricasOcupacao& metricas) {
+    crow::json::wvalue json;
+
+    json["taxaOcupacaoGeral"] = metricas.taxaOcupacaoGeral;
+    json["totalHorasOcupadas"] = metricas.totalHorasOcupadas;
+    json["totalHorasDisponiveis"] = metricas.totalHorasDisponiveis;
+    json["totalAssentosOciosos"] = metricas.totalAssentosOciosos;
+
+    crow::json::wvalue::list listaOcupacaoPorSala;
+    for (const auto& ocupacao : metricas.ocupacaoPorSala) {
+        crow::json::wvalue itemJson;
+        itemJson["salaId"] = ocupacao.salaId;
+        itemJson["salaNome"] = ocupacao.salaNome;
+        itemJson["capacidade"] = ocupacao.capacidade;
+        itemJson["horasOcupadas"] = ocupacao.horasOcupadas;
+        itemJson["horasDisponiveis"] = ocupacao.horasDisponiveis;
+        itemJson["taxaOcupacao"] = ocupacao.taxaOcupacao;
+        listaOcupacaoPorSala.push_back(std::move(itemJson));
+    }
+    json["ocupacaoPorSala"] = std::move(listaOcupacaoPorSala);
+
+    crow::json::wvalue::list listaHorariosPico;
+    for (const auto& horarioPico : metricas.horariosPico) {
+        crow::json::wvalue itemJson;
+        itemJson["diaSemana"] = horarioPico.diaSemana;
+        itemJson["horaInicio"] = horarioPico.horaInicio;
+        itemJson["quantidadeEncontros"] = horarioPico.quantidadeEncontros;
+        listaHorariosPico.push_back(std::move(itemJson));
+    }
+    json["horariosPico"] = std::move(listaHorariosPico);
+
+    crow::json::wvalue::list listaDesperdicio;
+    for (const auto& desperdicio : metricas.desperdicioAssentos) {
+        crow::json::wvalue itemJson;
+        itemJson["salaId"] = desperdicio.salaId;
+        itemJson["salaNome"] = desperdicio.salaNome;
+        itemJson["turmaCodigo"] = desperdicio.turmaCodigo;
+        itemJson["capacidade"] = desperdicio.capacidade;
+        itemJson["tamanhoTurma"] = desperdicio.tamanhoTurma;
+        itemJson["assentosOciosos"] = desperdicio.assentosOciosos;
+        listaDesperdicio.push_back(std::move(itemJson));
+    }
+    json["desperdicioAssentos"] = std::move(listaDesperdicio);
+
+    return json;
+}
+
 }

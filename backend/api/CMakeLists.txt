@@ -32,6 +32,7 @@ add_executable(ensalamento_api
     src/db/ConexaoBanco.cpp
     src/db/RepositorioEstado.cpp
     src/db/RepositorioVersao.cpp
+    src/db/RepositorioMetricas.cpp
     src/json/SerializadorRelatorio.cpp
     src/rotas/RotasEnsalamento.cpp
     src/rotas/RotasAutenticacao.cpp

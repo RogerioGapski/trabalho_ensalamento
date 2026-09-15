@@ -3,6 +3,7 @@
 
 #include "ensalamento/Tipos.hpp"
 #include "ensalamento/Alocador.hpp"
+#include "db/RepositorioMetricas.hpp"
 #include <crow.h>
 
 namespace ensalamento_api {
@@ -16,6 +17,7 @@ public:
     static crow::json::wvalue serializarAlocacao(const ensalamento::Alocacao& alocacao);
     static crow::json::wvalue serializarResultadoAlocacao(const ensalamento::ResultadoAlocacao& resultado);
     static crow::json::wvalue serializarResultadoValidacao(const ensalamento::ResultadoValidacao& resultado);
+    static crow::json::wvalue serializarMetricasOcupacao(const MetricasOcupacao& metricas);
 };
 
 }

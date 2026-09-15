@@ -513,3 +513,116 @@ select:focus-visible,
     text-align: center;
     overflow-x: auto;
 }
+
+.grafico-barras-ocupacao {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.barra-ocupacao {
+    display: grid;
+    grid-template-columns: 140px 1fr 160px;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.barra-ocupacao__rotulo {
+    font-size: 0.9rem;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.barra-ocupacao__trilho {
+    background-color: #e5e7eb;
+    border-radius: 999px;
+    height: 14px;
+    overflow: hidden;
+}
+
+.barra-ocupacao__preenchimento {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.3s ease;
+}
+
+.barra-ocupacao__valor {
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.mapa-calor-pico {
+    display: grid;
+    grid-template-columns: 60px repeat(6, 1fr);
+    gap: 2px;
+    margin-top: 0.75rem;
+    overflow-x: auto;
+}
+
+.mapa-calor-pico__celula {
+    min-width: 34px;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    border-radius: 4px;
+    color: var(--cor-texto);
+}
+
+.mapa-calor-pico__cabecalho {
+    font-weight: 700;
+    background-color: transparent !important;
+    color: var(--cor-texto-suave);
+}
+
+@media (max-width: 640px) {
+    .barra-ocupacao {
+        grid-template-columns: 90px 1fr;
+    }
+
+    .barra-ocupacao__valor {
+        grid-column: 1 / -1;
+        text-align: right;
+    }
+}
+
+.grade-atalhos-admin {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.grade-links-admin {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+.cartao-link-admin {
+    display: block;
+    text-decoration: none;
+    color: var(--cor-texto);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cartao-link-admin:hover,
+.cartao-link-admin:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.cartao-link-admin h2 {
+    margin: 0 0 0.4rem;
+    font-size: 1.05rem;
+    color: var(--cor-primaria);
+}
+
+.cartao-link-admin p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--cor-texto-suave);
+}

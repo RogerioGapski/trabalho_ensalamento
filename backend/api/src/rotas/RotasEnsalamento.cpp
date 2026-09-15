@@ -2,6 +2,7 @@
 #include "db/ConexaoBanco.hpp"
 #include "db/RepositorioEstado.hpp"
 #include "db/RepositorioVersao.hpp"
+#include "db/RepositorioMetricas.hpp"
 #include "json/SerializadorRelatorio.hpp"
 #include "ensalamento/Validador.hpp"
 #include "ensalamento/Alocador.hpp"
@@ -100,6 +101,33 @@ void RotasEnsalamento::registrar(crow::SimpleApp& aplicacao) {
                 resposta["resultado"] = std::move(jsonResultado);
 
                 return crow::response(201, resposta);
+            } catch (const std::exception& excecao) {
+                crow::json::wvalue resposta;
+                resposta["erro"] = std::string(excecao.what());
+                return crow::response(500, resposta);
+            }
+        }
+    );
+
+    CROW_ROUTE(aplicacao, "/api/admin/metricas/ocupacao").methods(crow::HTTPMethod::GET)(
+        [](const crow::request& requisicao) {
+            try {
+                auto parametros = crow::query_string(requisicao.url_params);
+                const char* periodoLetivoIdBruto = parametros.get("periodo_letivo_id");
+
+                if (periodoLetivoIdBruto == nullptr) {
+                    crow::json::wvalue resposta;
+                    resposta["erro"] = "Parametro periodo_letivo_id e obrigatorio";
+                    return crow::response(400, resposta);
+                }
+
+                std::string periodoLetivoId(periodoLetivoIdBruto);
+
+                std::unique_ptr<pqxx::connection> conexao = ConexaoBanco::abrirConexao();
+                MetricasOcupacao metricas = RepositorioMetricas::calcularMetricas(*conexao, periodoLetivoId);
+
+                crow::json::wvalue resposta = SerializadorRelatorio::serializarMetricasOcupacao(metricas);
+                return crow::response(200, resposta);
             } catch (const std::exception& excecao) {
                 crow::json::wvalue resposta;
                 resposta["erro"] = std::string(excecao.what());

@@ -63,7 +63,6 @@ const ClienteApi = (function () {
         buscarDetalhesSala: function (salaId) {
             return requisitar("/api/salas/" + encodeURIComponent(salaId), { method: "GET" });
         },
-
         buscarTurmasDoCoordenador: function () {
             return requisitar("/api/coordenador/turmas", { method: "GET" });
         },
@@ -73,7 +72,6 @@ const ClienteApi = (function () {
                 body: JSON.stringify(dados)
             });
         },
-
         validarImportacaoCsv: function (tipo, conteudoCsv) {
             return requisitar("/api/admin/importacoes/validar", {
                 method: "POST",
@@ -86,7 +84,6 @@ const ClienteApi = (function () {
                 body: JSON.stringify({ tipo: tipo, conteudo_csv: conteudoCsv })
             });
         },
-
         gerarPropostaEnsalamento: function (periodoLetivoId, configuracaoPesos) {
             return requisitar("/api/periodos/" + encodeURIComponent(periodoLetivoId) + "/ensalamento/gerar", {
                 method: "POST",
@@ -103,6 +100,11 @@ const ClienteApi = (function () {
             return requisitar("/api/periodos/" + encodeURIComponent(periodoLetivoId) + "/ensalamento/publicar", {
                 method: "POST",
                 body: JSON.stringify({ revisao_id: revisaoId, descricao: descricao })
+            });
+        },
+        buscarMetricasOcupacao: function (periodoLetivoId) {
+            return requisitar("/api/admin/metricas/ocupacao?periodo_letivo_id=" + encodeURIComponent(periodoLetivoId), {
+                method: "GET"
             });
         }
     };

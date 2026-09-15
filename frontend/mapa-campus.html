@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ensalamento — Mapa dos campi</title>
+    <link rel="stylesheet" href="css/estilo.css" />
+    <script src="js/configuracao.js"></script>
+</head>
+<body>
+    <header class="cabecalho" id="cabecalho-app"></header>
+
+    <main class="contentor">
+        <div class="cartao">
+            <h1 style="margin-top: 0;">Localizar sala</h1>
+            <p style="color: var(--cor-texto-suave);">Clique em um prédio para ver seus andares, depois clique em uma sala para ver os detalhes.</p>
+
+            <nav class="trilha-navegacao" id="trilha-navegacao" aria-label="Navegação do mapa"></nav>
+        </div>
+
+        <div class="abas" role="tablist" aria-label="Campus" id="abas-campus"></div>
+
+        <div class="cartao">
+            <div id="area-mapa-svg"></div>
+        </div>
+
+        <div class="cartao" id="cartao-detalhe-sala" hidden></div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/autenticacao.js"></script>
+    <script src="js/componentesCabecalho.js"></script>
+    <script src="js/paginaMapaCampus.js"></script>
+</body>
+</html>

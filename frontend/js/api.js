@@ -106,6 +106,9 @@ const ClienteApi = (function () {
             return requisitar("/api/admin/metricas/ocupacao?periodo_letivo_id=" + encodeURIComponent(periodoLetivoId), {
                 method: "GET"
             });
+        },
+        buscarMapaCampus: function () {
+            return requisitar("/api/mapa/campus", { method: "GET" });
         }
     };
 })();

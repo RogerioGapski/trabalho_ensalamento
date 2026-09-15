@@ -626,3 +626,118 @@ select:focus-visible,
     font-size: 0.9rem;
     color: var(--cor-texto-suave);
 }
+
+.trilha-navegacao {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+    margin-top: 0.75rem;
+}
+
+.botao-trilha {
+    background: none;
+    border: none;
+    padding: 0.2rem 0.3rem;
+    font-size: 0.9rem;
+    color: var(--cor-primaria);
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.botao-trilha--atual {
+    color: var(--cor-texto);
+    font-weight: 700;
+    text-decoration: none;
+    cursor: default;
+}
+
+.mapa-svg {
+    display: block;
+    max-height: 70vh;
+}
+
+.predio-grupo,
+.sala-grupo {
+    cursor: pointer;
+}
+
+.predio-retangulo {
+    fill: #eff6ff;
+    stroke: var(--cor-primaria);
+    stroke-width: 2;
+    transition: fill 0.15s ease;
+}
+
+.predio-grupo:hover .predio-retangulo,
+.predio-grupo:focus-visible .predio-retangulo {
+    fill: #dbeafe;
+}
+
+.predio-rotulo {
+    font-size: 15px;
+    font-weight: 700;
+    fill: var(--cor-texto);
+}
+
+.predio-sub-rotulo {
+    font-size: 12px;
+    fill: var(--cor-texto-suave);
+}
+
+.sala-retangulo {
+    fill: #ffffff;
+    stroke: var(--cor-borda);
+    stroke-width: 1.5;
+    transition: fill 0.15s ease, stroke 0.15s ease;
+}
+
+.sala-grupo:hover .sala-retangulo,
+.sala-grupo:focus-visible .sala-retangulo {
+    fill: #f3f4f6;
+}
+
+.sala-grupo--selecionada .sala-retangulo {
+    fill: #dcfce7;
+    stroke: var(--cor-sucesso);
+    stroke-width: 2;
+}
+
+.sala-rotulo {
+    font-size: 13px;
+    font-weight: 700;
+    fill: var(--cor-texto);
+}
+
+.sala-sub-rotulo {
+    font-size: 11px;
+    fill: var(--cor-texto-suave);
+}
+
+.andar-rotulo {
+    font-size: 13px;
+    font-weight: 700;
+    fill: var(--cor-texto-suave);
+}
+
+.grade-detalhe-sala {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+    margin: 0.75rem 0 1rem;
+}
+
+.grade-detalhe-sala > div {
+    background-color: #f3f4f6;
+    border-radius: 8px;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.9rem;
+}
+
+.link-ver-localizacao {
+    display: inline-block;
+    margin-top: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+}

@@ -3,6 +3,7 @@
 #include "db/RepositorioEstado.hpp"
 #include "db/RepositorioVersao.hpp"
 #include "db/RepositorioMetricas.hpp"
+#include "db/RepositorioMapa.hpp"
 #include "json/SerializadorRelatorio.hpp"
 #include "ensalamento/Validador.hpp"
 #include "ensalamento/Alocador.hpp"
@@ -127,6 +128,22 @@ void RotasEnsalamento::registrar(crow::SimpleApp& aplicacao) {
                 MetricasOcupacao metricas = RepositorioMetricas::calcularMetricas(*conexao, periodoLetivoId);
 
                 crow::json::wvalue resposta = SerializadorRelatorio::serializarMetricasOcupacao(metricas);
+                return crow::response(200, resposta);
+            } catch (const std::exception& excecao) {
+                crow::json::wvalue resposta;
+                resposta["erro"] = std::string(excecao.what());
+                return crow::response(500, resposta);
+            }
+        }
+    );
+
+    CROW_ROUTE(aplicacao, "/api/mapa/campus").methods(crow::HTTPMethod::GET)(
+        [](const crow::request&) {
+            try {
+                std::unique_ptr<pqxx::connection> conexao = ConexaoBanco::abrirConexao();
+                std::vector<CampusMapa> campi = RepositorioMapa::carregarMapaCompleto(*conexao);
+
+                crow::json::wvalue resposta = SerializadorRelatorio::serializarMapaCompleto(campi);
                 return crow::response(200, resposta);
             } catch (const std::exception& excecao) {
                 crow::json::wvalue resposta;

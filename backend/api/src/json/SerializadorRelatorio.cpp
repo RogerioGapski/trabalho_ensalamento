@@ -164,4 +164,53 @@ crow::json::wvalue SerializadorRelatorio::serializarMetricasOcupacao(const Metri
     return json;
 }
 
+crow::json::wvalue SerializadorRelatorio::serializarMapaCompleto(const std::vector<CampusMapa>& campi) {
+    crow::json::wvalue::list listaCampi;
+
+    for (const auto& campus : campi) {
+        crow::json::wvalue jsonCampus;
+        jsonCampus["id"] = campus.id;
+        jsonCampus["nome"] = campus.nome;
+        jsonCampus["endereco"] = campus.endereco.has_value() ? campus.endereco.value() : "";
+        jsonCampus["cidade"] = campus.cidade.has_value() ? campus.cidade.value() : "";
+
+        crow::json::wvalue::list listaPredios;
+        for (const auto& predio : campus.predios) {
+            crow::json::wvalue jsonPredio;
+            jsonPredio["id"] = predio.id;
+            jsonPredio["nome"] = predio.nome;
+            jsonPredio["instrucoesAcesso"] = predio.instrucoesAcesso.has_value() ? predio.instrucoesAcesso.value() : "";
+
+            crow::json::wvalue::list listaSalas;
+            for (const auto& sala : predio.salas) {
+                crow::json::wvalue jsonSala;
+                jsonSala["id"] = sala.id;
+                jsonSala["nome"] = sala.nome;
+                jsonSala["tipo"] = sala.tipo;
+                jsonSala["andar"] = sala.andar;
+                jsonSala["capacidade"] = sala.capacidade;
+                jsonSala["acessivel"] = sala.acessivel;
+
+                crow::json::wvalue::list listaRecursos;
+                for (const auto& recurso : sala.recursos) {
+                    listaRecursos.push_back(recurso);
+                }
+                jsonSala["recursos"] = std::move(listaRecursos);
+
+                listaSalas.push_back(std::move(jsonSala));
+            }
+            jsonPredio["salas"] = std::move(listaSalas);
+
+            listaPredios.push_back(std::move(jsonPredio));
+        }
+        jsonCampus["predios"] = std::move(listaPredios);
+
+        listaCampi.push_back(std::move(jsonCampus));
+    }
+
+    crow::json::wvalue resposta;
+    resposta["campi"] = std::move(listaCampi);
+    return resposta;
+}
+
 }

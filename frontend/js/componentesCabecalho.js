@@ -15,6 +15,9 @@ function montarCabecalho(elementoAlvoId, nomeUsuario, papelUsuario) {
         '<a class="cabecalho__marca" href="index.html">' +
         '<span aria-hidden="true">🏫</span> Ensalamento' +
         "</a>" +
+        '<nav class="cabecalho__nav">' +
+        '<a class="botao" href="mapa-campus.html">Mapa</a>' +
+        "</nav>" +
         '<div class="cabecalho__usuario">' +
         "<span>" + escaparHtml(nomeUsuario) + " · " + escaparHtml(rotulosPapel[papelUsuario] || papelUsuario) + "</span>" +
         '<button class="botao" id="botao-sair" type="button">Sair</button>' +

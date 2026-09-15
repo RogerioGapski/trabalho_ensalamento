@@ -5,6 +5,7 @@
 #include "ensalamento/Alocador.hpp"
 #include "db/RepositorioMetricas.hpp"
 #include <crow.h>
+#include "db/RepositorioMapa.hpp"
 
 namespace ensalamento_api {
 
@@ -18,6 +19,7 @@ public:
     static crow::json::wvalue serializarResultadoAlocacao(const ensalamento::ResultadoAlocacao& resultado);
     static crow::json::wvalue serializarResultadoValidacao(const ensalamento::ResultadoValidacao& resultado);
     static crow::json::wvalue serializarMetricasOcupacao(const MetricasOcupacao& metricas);
+    static crow::json::wvalue serializarMapaCompleto(const std::vector<CampusMapa>& campi);
 };
 
 }

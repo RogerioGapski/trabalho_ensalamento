@@ -16,6 +16,10 @@ const RenderizadorAgenda = (function () {
                 '<span class="encontro__data-atualizacao">Atualizado em ' + escaparHtml(dataFormatada) + "</span>";
         }
 
+        const linkLocalizacao = encontro.salaId
+            ? '<a class="link-ver-localizacao" href="mapa-campus.html?sala_id=' + encodeURIComponent(encontro.salaId) + '">Ver localização →</a>'
+            : "";
+
         return (
             '<div class="encontro" data-encontro-id="' + escaparHtml(encontro.id) + '">' +
             '<div class="encontro__horario">' + escaparHtml(encontro.horaInicio) + "<br>" + escaparHtml(encontro.horaFim) + "</div>" +
@@ -26,6 +30,7 @@ const RenderizadorAgenda = (function () {
             "</p>" +
             (textoLinhaExtra ? '<p class="encontro__local">' + escaparHtml(textoLinhaExtra) + "</p>" : "") +
             seloAlteracao +
+            linkLocalizacao +
             "</div>" +
             "</div>"
         );

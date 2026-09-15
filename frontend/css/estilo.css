@@ -474,3 +474,42 @@ select:focus-visible,
     font-size: 0.85rem;
     color: var(--cor-texto-suave);
 }
+
+.cartao-instituicao {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.logotipo-instituicao {
+    max-height: 56px;
+    max-width: 140px;
+    object-fit: contain;
+}
+
+.texto-instituicao-nome {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.texto-instituicao-disciplina {
+    color: var(--cor-texto-suave);
+    margin: 0.2rem 0 0;
+}
+
+.cartao-aviso-academico {
+    background-color: #fef9c3;
+    border-color: #fde68a;
+}
+
+.formula-matematica {
+    background-color: #f3f4f6;
+    border-radius: 8px;
+    padding: 1rem;
+    font-family: "Cambria Math", Cambria, serif;
+    font-size: 1.05rem;
+    text-align: center;
+    overflow-x: auto;
+}

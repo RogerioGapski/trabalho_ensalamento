@@ -13,127 +13,220 @@
     </header>
 
     <main class="contentor">
-        <div class="cartao">
-            <p><strong>Nota:</strong> este é um trabalho acadêmico e não é uma publicação institucional oficial.</p>
-            <p id="texto-instituicao"></p>
-            <p id="texto-disciplina"></p>
+        <div class="cartao cartao-instituicao">
+            <img
+                src="assets/logotipo-instituicao.png"
+                alt="Logotipo da instituição de ensino"
+                class="logotipo-instituicao"
+                onerror="this.style.display='none'"
+            />
+            <div>
+                <p id="texto-instituicao" class="texto-instituicao-nome"></p>
+                <p id="texto-disciplina" class="texto-instituicao-disciplina"></p>
+            </div>
+        </div>
+
+        <div class="cartao cartao-aviso-academico">
+            <p>
+                <strong>Nota de natureza acadêmica:</strong> este sistema é um trabalho desenvolvido para fins de
+                avaliação em disciplina de graduação. Não é uma publicação institucional oficial, não substitui o
+                sistema acadêmico da instituição.
+            </p>
         </div>
 
         <div class="cartao">
-            <h2>Participantes do grupo</h2>
+            <h2>Criador do projeto</h2>
             <ul id="lista-participantes">
-                <li>Substitua pelo nome do integrante — Papel: backend em C++</li>
-                <li>Substitua pelo nome do integrante — Papel: frontend</li>
-                <li>Substitua pelo nome do integrante — Papel: infraestrutura e banco de dados</li>
-                <li>Substitua pelo nome do integrante — Papel: documentação e testes</li>
+                <li><strong>Rogério Gapski da Silva</strong></li>
             </ul>
+            <p class="mensagem-estado" style="padding: 0.5rem 0; text-align: left;">
+                A distribuição de tarefas acima é resumida; o histórico detalhado de contribuição de cada integrante
+                está registrado nos commits, pull requests e revisões do repositório público no GitHub.
+            </p>
         </div>
 
         <div class="cartao">
-            <h2>Problema atacado e objetivos</h2>
+            <h2>Problema atacado e objetivos do sistema</h2>
             <p>
                 O ensalamento envolve informações que mudam a cada semestre e, por vezes, durante o próprio período
-                letivo. Sem uma fonte central, alunos, professores e a coordenação podem consultar versões
-                diferentes do horário, gerando conflitos de sala e informações desatualizadas. Este sistema
-                centraliza os dados de turmas, horários e salas, detecta conflitos antes da publicação e mantém
-                histórico de alterações.
+                letivo: o número de estudantes pode aumentar, uma sala pode ficar indisponível, uma atividade pode
+                exigir laboratório, ou um professor pode precisar de acessibilidade ou equipamento específico. Sem
+                uma fonte central, estudantes, professores e a equipe administrativa podem consultar versões
+                diferentes do horário e ocupar a mesma sala com duas turmas.
             </p>
+            <p>Objetivos do sistema:</p>
+            <ul>
+                <li>Centralizar os dados de períodos letivos, cursos, turmas, horários, prédios e salas;</li>
+                <li>permitir que coordenações informem tamanhos e necessidades das turmas;</li>
+                <li>apoiar o administrador na produção de um ensalamento válido;</li>
+                <li>detectar conflitos antes da publicação;</li>
+                <li>publicar uma versão oficial e atualizada do ensalamento;</li>
+                <li>facilitar a localização física das salas;</li>
+                <li>destacar mudanças sem exigir avisos individuais repetidos;</li>
+                <li>manter um histórico das alterações e de seus responsáveis.</li>
+            </ul>
         </div>
 
         <div class="cartao">
-            <h2>Metodologia e regras implementadas</h2>
-            <p>O núcleo de cálculo (escrito em C++) implementa as seguintes regras de negócio:</p>
+            <h2>Metodologia: regras de negócio implementadas</h2>
+            <p>
+                O núcleo de cálculo, escrito em C++ puro (sem bibliotecas de terceiros no núcleo), valida oito
+                regras de negócio (RB-01 a RB-08) antes de aceitar qualquer alocação:
+            </p>
+            <table class="tabela-relatorio">
+                <thead>
+                    <tr><th>Regra</th><th>Descrição formal</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>RB-01</td><td>Uma sala não pode receber dois encontros sobrepostos no mesmo dia da semana.</td></tr>
+                    <tr><td>RB-02</td><td>Uma turma não pode ocupar duas salas diferentes no mesmo encontro, exceto quando houver divisão previamente cadastrada.</td></tr>
+                    <tr><td>RB-03</td><td>A capacidade da sala deve ser maior ou igual ao tamanho de cálculo da turma (quantidade confirmada, ou prevista na ausência de confirmação).</td></tr>
+                    <tr><td>RB-04</td><td>Uma sala indisponível, em manutenção ou desativada não pode receber novos encontros.</td></tr>
+                    <tr><td>RB-05</td><td>Todos os recursos obrigatórios e o tipo de sala obrigatório da turma devem existir na sala escolhida.</td></tr>
+                    <tr><td>RB-06</td><td>Uma exigência de acessibilidade é sempre tratada como obrigatória, mesmo que registrada como preferência.</td></tr>
+                    <tr><td>RB-07</td><td>Um professor não pode ser associado a encontros sobrepostos no mesmo dia da semana.</td></tr>
+                    <tr><td>RB-08</td><td>Uma alteração em turma, horário, tamanho ou sala invalida as verificações anteriores relacionadas àquela alocação.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="cartao">
+            <h2>Notação matemática do índice de adequação</h2>
+            <p>
+                Entre as salas que satisfazem todas as regras obrigatórias (RB-01 a RB-07), o algoritmo escolhe a
+                sala <em>s</em> para o encontro <em>e</em> da turma <em>t</em> que maximiza o índice de adequação
+                <em>I(s, t)</em>, definido como uma combinação linear ponderada de cinco componentes:
+            </p>
+            <p class="formula-matematica">
+                I(s, t) = w₁ · f(s, t) + w₂ · M(s, t) + w₃ · P(s, t) + w₄ · C(s, t) + w₅ · D(s, t)
+            </p>
+            <p>onde:</p>
             <ul>
-                <li>RB-01: uma sala não recebe dois encontros sobrepostos.</li>
-                <li>RB-02: uma turma não ocupa duas salas diferentes no mesmo encontro, exceto com divisão cadastrada.</li>
-                <li>RB-03: a capacidade da sala deve ser ≥ ao tamanho de cálculo da turma.</li>
-                <li>RB-04: salas em manutenção ou desativadas não recebem novos encontros.</li>
-                <li>RB-05: todos os recursos obrigatórios da turma devem existir na sala escolhida.</li>
-                <li>RB-06: exigência de acessibilidade é sempre tratada como obrigatória.</li>
-                <li>RB-07: um professor não pode estar em dois encontros sobrepostos.</li>
-                <li>RB-08: alterações em turma, horário, tamanho ou sala invalidam verificações anteriores relacionadas.</li>
+                <li>
+                    <strong>f(s, t) = 1 / (1 + max(0, capacidade(s) − tamanho(t)))</strong> — favorece a sala com a
+                    menor sobra de espaço em relação ao tamanho de cálculo da turma;
+                </li>
+                <li>
+                    <strong>M(s, t) ∈ {0, 1}</strong> — vale 1 se <em>s</em> é a mesma sala já usada por <em>t</em>
+                    em outro encontro da semana, incentivando a permanência da turma na mesma sala;
+                </li>
+                <li>
+                    <strong>P(s, t) ∈ {0, 1}</strong> — vale 1 se o prédio de <em>s</em> é o mesmo prédio já usado por
+                    <em>t</em> na semana, incentivando a permanência no mesmo prédio;
+                </li>
+                <li>
+                    <strong>C(s, t) ∈ {0, 1}</strong> — vale 1 se o campus de <em>s</em> corresponde ao campus
+                    preferido informado pela coordenação de <em>t</em>;
+                </li>
+                <li>
+                    <strong>D(s, t) ∈ {0, 1}</strong> — vale 1 se o prédio de <em>s</em> corresponde ao prédio
+                    preferido informado pela coordenação de <em>t</em>;
+                </li>
+                <li>
+                    <strong>w₁, w₂, w₃, w₄, w₅ ∈ ℝ≥0</strong> — pesos configuráveis pelo administrador, visíveis na
+                    tela de geração da proposta.
+                </li>
             </ul>
             <p>
-                A escolha de sala entre as opções válidas usa um índice de adequação
-                <em>I = w₁·f(sobra) + w₂·[mesma sala] + w₃·[mesmo prédio] + w₄·[campus preferido] + w₅·[prédio preferido]</em>,
-                em que <em>f(sobra) = 1 / (1 + sobra_de_capacidade)</em> favorece a menor sobra de espaço, e os pesos
-                <em>w₁..w₅</em> são configuráveis pelo administrador. Essa formulação segue o critério do documento-base
-                da disciplina (seção 6.9.2), que permite heurística simples desde que as restrições obrigatórias sejam
-                respeitadas e as escolhas sejam explicadas.
+                O algoritmo em si é uma heurística gulosa (não um otimizador matemático global): as turmas são
+                ordenadas da mais difícil para a mais fácil de alocar (menor número de salas elegíveis primeiro) e,
+                para cada encontro, a sala elegível de maior <em>I(s, t)</em> é escolhida greedily, sem
+                retrocesso (<em>backtracking</em>). Em caso de empate no índice, o desempate é feito pela ordem
+                lexicográfica do identificador da sala, garantindo determinismo. Essa abordagem é permitida
+                explicitamente pelo documento-base da disciplina, que dispensa a exigência de uma solução ótima
+                global desde que as restrições obrigatórias sejam respeitadas e as escolhas sejam explicadas ao
+                usuário.
             </p>
         </div>
 
         <div class="cartao">
-            <h2>Justificativa da licença</h2>
+            <h2>Justificativa da licença adotada</h2>
             <p>
-                O projeto adota a licença MIT pela permissividade de uso e distribuição, compatibilidade com
-                bibliotecas de terceiros usadas na camada de autenticação e API, simplicidade jurídica para
-                avaliação por instituições parceiras, e por ser um padrão amplamente adotado em ferramentas
-                educacionais de código aberto. A justificativa completa está no arquivo <code>LICENSE</code> do
-                repositório.
+                O código do projeto é distribuído sob a <strong>licença MIT</strong>. As razões dessa escolha,
+                detalhadas integralmente no arquivo <code>LICENSE</code> do repositório, resumem-se a:
             </p>
+            <ul>
+                <li>permissividade de uso, cópia, modificação e distribuição, com risco jurídico mínimo para os autores;</li>
+                <li>compatibilidade com as licenças das bibliotecas de terceiros usadas fora do núcleo (autenticação, comunicação HTTP, driver de banco de dados);</li>
+                <li>simplicidade de texto, o que facilita avaliação de conformidade por parte de instituições parceiras;</li>
+                <li>incentivo a contribuições externas e adaptações do sistema por outras instituições, sem obrigação de tornar público o código de eventuais adaptações privadas;</li>
+                <li>alinhamento com o padrão predominante em ferramentas educacionais de código aberto (timetabling, agendamento).</li>
+            </ul>
         </div>
 
         <div class="cartao">
             <h2>Justificativa da escolha de front-end</h2>
             <p>
-                Optamos por HTML5, CSS3 e JavaScript vanilla, sem framework. Por essa escolha não envolver adoção de
-                framework, esta seção não está sujeita à exigência de justificativa prevista no documento-base da
-                disciplina — ainda assim, documentamos a decisão: o escopo de telas é pequeno (login, seleção de
-                turma, agenda do aluno, agenda do professor, dois painéis administrativos), o hospedeiro é o GitHub
-                Pages (arquivos estáticos, sem etapa de build), e a ausência de framework elimina completamente o
-                custo de bundle de um framework de UI e o tempo de download e parse correspondente.
+                Optamos por <strong>HTML5, CSS3 e JavaScript vanilla</strong>, sem framework (React, Vue, Svelte ou
+                similar). Como o documento-base da disciplina só exige justificativa para grupos que adotarem um
+                framework, esta seção é apresentada apenas para registro da decisão:
             </p>
+            <ul>
+                <li>o escopo de telas do sistema é conhecido e limitado (login, seleção de turma, agendas, painéis administrativos), sem necessidade de um sistema de componentes reativos complexo;</li>
+                <li>o hospedeiro escolhido é o GitHub Pages, que serve arquivos estáticos diretamente — um framework exigiria uma etapa de build (bundler, transpilador) fora do escopo pedido para essa camada;</li>
+                <li>a ausência de framework elimina por completo o custo de bundle de um framework de UI (tipicamente entre 40 KB e 140 KB comprimidos, dependendo do framework e da configuração) e o tempo de download, parse e execução (<em>hydration</em>) correspondente, o que é especialmente relevante para o requisito de bom desempenho percebido em conexões lentas.</li>
+            </ul>
         </div>
 
         <div class="cartao">
             <h2>Resultados obtidos</h2>
             <p>
-                Esta seção será preenchida com capturas de tela e métricas reais (tempo de geração do ensalamento,
-                taxa de turmas alocadas automaticamente) obtidas com dados de demonstração, à medida que os módulos
-                de administração forem concluídos.
+                Esta seção será preenchida com capturas de tela e métricas reais (tempo de geração da proposta de
+                ensalamento, percentual de turmas alocadas automaticamente sobre dados de demonstração, tempo de
+                resposta das consultas de agenda) à medida que o sistema for populado com dados de exemplo
+                claramente identificados como tal.
             </p>
         </div>
 
         <div class="cartao">
             <h2>Discussão ética</h2>
-            <p>
-                Os dados de necessidade de acessibilidade e de recursos são fornecidos pela própria coordenação e
-                tratados como obrigatórios (RB-06), o que reduz o risco de negligência sistemática dessas
-                necessidades. Um viés possível está na ordenação de turmas por "dificuldade de alocação": turmas
-                grandes ou com muitas exigências tendem a ser processadas primeiro, o que privilegia sua alocação
-                em detrimento de turmas menores processadas por último em cenários de escassez de salas. Um erro do
-                sistema (por exemplo, uma sala publicada incorretamente) pode levar alunos e professores a se
-                deslocarem para o local errado; por isso, toda alteração é registrada com autor, data e motivo
-                (RB-12), permitindo auditoria e correção rápida.
-            </p>
+            <p><strong>Vieses possíveis nos dados usados.</strong> As necessidades obrigatórias e preferenciais de
+            cada turma são informadas manualmente pela coordenação. Um cadastro incompleto (por exemplo, uma
+            necessidade de acessibilidade não registrada) não é detectável pelo sistema — a regra RB-06 só age
+            sobre o que foi declarado, então o risco de omissão recai sobre o processo humano de coleta, não sobre
+            o algoritmo.</p>
+            <p><strong>Vieses nos critérios de decisão programados.</strong> A heurística gulosa ordena as turmas da
+            mais difícil para a mais fácil de alocar antes de processá-las. Isso favorece sistematicamente turmas
+            grandes ou com muitas exigências (que são processadas primeiro, com mais opções de sala disponíveis),
+            em detrimento de turmas menores ou sem exigências especiais, que são processadas por último e têm maior
+            chance de ficar sem sala em cenários de escassez. Essa é uma escolha de desenho consciente — priorizar
+            quem tem menos alternativas — mas tem o efeito colateral de tratar turmas "fáceis" como reserva de
+            capacidade.</p>
+            <p><strong>Consequências de um erro do sistema.</strong> Uma sala publicada incorretamente pode levar
+            alunos e professores a se deslocarem para o local errado, com impacto direto sobre o tempo de aula
+            efetivo. Por isso, toda alteração publicada registra autor, data e motivo (RB-12/histórico de
+            alterações), permitindo auditoria e correção rápida, e o aluno vê explicitamente o selo "Alterada"
+            com a data de atualização em sua agenda.</p>
         </div>
 
         <div class="cartao">
             <h2>Limitações conhecidas</h2>
             <ul>
-                <li>Não há otimização matemática global — o algoritmo é uma heurística gulosa (ver seção 6.9 do memorial).</li>
-                <li>A coluna de status "em manutenção" da sala ainda depende de uma migration adicional no banco.</li>
-                <li>Os painéis de coordenador e administrador ainda são esqueletos, sem os fluxos completos de RF-15 a RF-34.</li>
+                <li>O algoritmo de alocação é uma heurística gulosa sem retrocesso — não garante o ensalamento ótimo global, apenas um ensalamento válido dentro das restrições obrigatórias.</li>
+                <li>A detecção de sala "em manutenção" no banco de dados depende de uma coluna de status ainda não presente no schema inicial (hoje há apenas um campo booleano ativo/inativo).</li>
+                <li>A divisão de turma entre múltiplas salas (RB-02, exceção cadastrada) ainda não possui interface de cadastro dedicada.</li>
+                <li>Os painéis de coordenador e administrador cobrem os fluxos principais descritos no memorial, mas alguns incrementos (mapa interativo, notificações, sincronização com calendários externos) permanecem como extensões futuras, não implementadas nesta versão.</li>
             </ul>
         </div>
 
         <div class="cartao">
             <h2>Conclusão e referências</h2>
             <p>
-                O sistema atende, na versão atual, aos requisitos de autenticação federada, seleção e consulta de
-                turma pelo aluno, e consulta de agenda pelo professor, com o núcleo de regras de negócio e o
-                algoritmo de alocação implementados e testados em C++. As referências específicas de cada fórmula e
-                regra estão descritas nesta própria página.
+                O sistema implementado cobre o fluxo completo descrito no memorial da disciplina: autenticação
+                federada sem armazenamento de senha, seleção e consulta de turma pelo aluno, consulta de agenda pelo
+                professor, registro de necessidades pelo coordenador, importação de dados com relatório de erros, e
+                geração, ajuste manual com revalidação imediata e publicação do ensalamento pelo administrador. As
+                regras de negócio, a fórmula do índice de adequação e as justificativas de licença e de escolha de
+                front-end estão descritas integralmente nesta página, conforme exigido pela seção 5.4 do
+                documento-base da disciplina.
             </p>
         </div>
     </main>
 
     <script>
-        document.getElementById("texto-instituicao").textContent =
-            "Instituição: " + window.CONFIGURACAO_ENSALAMENTO.nomeInstituicao;
+        document.getElementById("texto-instituicao").textContent = window.CONFIGURACAO_ENSALAMENTO.nomeInstituicao;
         document.getElementById("texto-disciplina").textContent =
-            "Disciplina: " + window.CONFIGURACAO_ENSALAMENTO.nomeDisciplina + " — " + window.CONFIGURACAO_ENSALAMENTO.anoLetivoExibicao;
+            window.CONFIGURACAO_ENSALAMENTO.nomeDisciplina + " — " + window.CONFIGURACAO_ENSALAMENTO.anoLetivoExibicao;
     </script>
 </body>
 </html>

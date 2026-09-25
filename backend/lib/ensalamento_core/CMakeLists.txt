@@ -4,7 +4,7 @@ project(ensalamento_core LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_library(ensalamento_core STATIC
+add_library(ensalamento_core
     src/Validador.cpp
     src/RastreadorAlteracoes.cpp
     src/IndiceAdequacao.cpp
@@ -12,6 +12,7 @@ add_library(ensalamento_core STATIC
 )
 
 target_include_directories(ensalamento_core PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 

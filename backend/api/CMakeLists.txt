@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(PostgreSQL REQUIRED)
-find_package(libpqxx REQUIRED)
+find_package(pqxx REQUIRED)
 find_package(Threads REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system)
 find_package(OpenSSL REQUIRED)
@@ -60,7 +60,7 @@ target_include_directories(ensalamento_api PRIVATE
 target_link_libraries(ensalamento_api PRIVATE
     ensalamento_core
     Crow::Crow
-    libpqxx::pqxx
+    pqxx::pqxx
     Threads::Threads
     Boost::system
     OpenSSL::SSL

@@ -8,35 +8,6 @@
 int main() {
     crow::SimpleApp aplicacao;
 
-    auto responderOptions = [](crow::response& res) {
-        res.add_header("Access-Control-Allow-Origin", "https://rogeriogapski.github.io");
-        res.add_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        res.add_header("Access-Control-Allow-Headers", "Content-Type, Authorization, Cookie");
-        res.add_header("Access-Control-Allow-Credentials", "true");
-        res.code = 204;
-        res.end();
-    };
-
-    CROW_ROUTE(aplicacao, "/api/auth/google").methods(crow::HTTPMethod::Options)
-    ([responderOptions](const crow::request&, crow::response& res) {
-        responderOptions(res);
-    });
-
-    CROW_ROUTE(aplicacao, "/api/auth/microsoft").methods(crow::HTTPMethod::Options)
-    ([responderOptions](const crow::request&, crow::response& res) {
-        responderOptions(res);
-    });
-
-    CROW_ROUTE(aplicacao, "/api/auth/me").methods(crow::HTTPMethod::Options)
-    ([responderOptions](const crow::request&, crow::response& res) {
-        responderOptions(res);
-    });
-
-    CROW_ROUTE(aplicacao, "/api/auth/logout").methods(crow::HTTPMethod::Options)
-    ([responderOptions](const crow::request&, crow::response& res) {
-        responderOptions(res);
-    });
-
     ensalamento_api::RotasAutenticacao::registrar(aplicacao);
     ensalamento_api::RotasEnsalamento::registrar(aplicacao);
     ensalamento_api::RotasCalendario::registrar(aplicacao);

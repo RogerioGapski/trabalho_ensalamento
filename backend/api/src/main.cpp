@@ -8,12 +8,23 @@
 int main() {
     crow::SimpleApp aplicacao;
 
-    CROW_ROUTE(aplicacao, "/api/<path>").methods(crow::HTTPMethod::Options)
-    ([](const crow::request& req, crow::response& res, const std::string& /*path*/) {
+    auto adicionarCabecalhosCors = [](crow::response& res) {
         res.add_header("Access-Control-Allow-Origin", "https://rogeriogapski.github.io");
         res.add_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         res.add_header("Access-Control-Allow-Headers", "Content-Type, Authorization, Cookie");
         res.add_header("Access-Control-Allow-Credentials", "true");
+    };
+
+    CROW_ROUTE(aplicacao, "/api/<string>").methods(crow::HTTPMethod::Options)
+    ([adicionarCabecalhosCors](const crow::request&, crow::response& res, const std::string&) {
+        adicionarCabecalhosCors(res);
+        res.code = 204;
+        res.end();
+    });
+
+    CROW_ROUTE(aplicacao, "/api/<string>/<string>").methods(crow::HTTPMethod::Options)
+    ([adicionarCabecalhosCors](const crow::request&, crow::response& res, const std::string&, const std::string&) {
+        adicionarCabecalhosCors(res);
         res.code = 204;
         res.end();
     });

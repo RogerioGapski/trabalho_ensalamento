@@ -10,6 +10,12 @@
 
 namespace ensalamento_api {
 
+// Função auxiliar para injetar os cabeçalhos de CORS nas respostas HTTP
+static void aplicarCabecalhosCors(crow::response& respostaHttp) {
+    respostaHttp.add_header("Access-Control-Allow-Origin", "https://rogeriogapski.github.io");
+    respostaHttp.add_header("Access-Control-Allow-Credentials", "true");
+}
+
 static crow::response tratarLoginComProvedor(DadosTokenValidado dadosToken) {
     std::unique_ptr<pqxx::connection> conexao = ConexaoBanco::abrirConexao();
 
@@ -21,7 +27,9 @@ static crow::response tratarLoginComProvedor(DadosTokenValidado dadosToken) {
         if (!usuarioExistente.value().ativo) {
             crow::json::wvalue resposta;
             resposta["erro"] = "Conta desativada";
-            return crow::response(403, resposta);
+            crow::response respostaHttp(403, resposta);
+            aplicarCabecalhosCors(respostaHttp);
+            return respostaHttp;
         }
         usuario = usuarioExistente.value();
     } else if (RepositorioUsuarios::dominioPermitido(dadosToken.email)) {
@@ -29,7 +37,9 @@ static crow::response tratarLoginComProvedor(DadosTokenValidado dadosToken) {
     } else {
         crow::json::wvalue resposta;
         resposta["erro"] = "Conta nao autorizada a acessar o sistema";
-        return crow::response(403, resposta);
+        crow::response respostaHttp(403, resposta);
+        aplicarCabecalhosCors(respostaHttp);
+        return respostaHttp;
     }
 
     SessaoCriada sessaoCriada = GerenciadorSessao::criarSessao(*conexao, usuario.id);
@@ -48,6 +58,7 @@ static crow::response tratarLoginComProvedor(DadosTokenValidado dadosToken) {
 
     crow::response respostaHttp(200, resposta);
     respostaHttp.add_header("Set-Cookie", CookieSessao::construirCabecalhoDefinirCookie(sessaoCriada.tokenBruto, horasValidade));
+    aplicarCabecalhosCors(respostaHttp);
 
     return respostaHttp;
 }
@@ -63,7 +74,9 @@ void RotasAutenticacao::registrar(crow::SimpleApp& aplicacao) {
                 if (!corpo || !corpo.has("id_token")) {
                     crow::json::wvalue resposta;
                     resposta["erro"] = "Campo id_token e obrigatorio";
-                    return crow::response(400, resposta);
+                    crow::response respostaHttp(400, resposta);
+                    aplicarCabecalhosCors(respostaHttp);
+                    return respostaHttp;
                 }
 
                 std::string idToken = corpo["id_token"].s();
@@ -73,7 +86,9 @@ void RotasAutenticacao::registrar(crow::SimpleApp& aplicacao) {
             } catch (const std::exception& excecao) {
                 crow::json::wvalue resposta;
                 resposta["erro"] = std::string("Falha ao validar token do Google: ") + excecao.what();
-                return crow::response(401, resposta);
+                crow::response respostaHttp(401, resposta);
+                aplicarCabecalhosCors(respostaHttp);
+                return respostaHttp;
             }
         }
     );
@@ -85,7 +100,9 @@ void RotasAutenticacao::registrar(crow::SimpleApp& aplicacao) {
                 if (!corpo || !corpo.has("id_token")) {
                     crow::json::wvalue resposta;
                     resposta["erro"] = "Campo id_token e obrigatorio";
-                    return crow::response(400, resposta);
+                    crow::response respostaHttp(400, resposta);
+                    aplicarCabecalhosCors(respostaHttp);
+                    return respostaHttp;
                 }
 
                 std::string idToken = corpo["id_token"].s();
@@ -95,7 +112,9 @@ void RotasAutenticacao::registrar(crow::SimpleApp& aplicacao) {
             } catch (const std::exception& excecao) {
                 crow::json::wvalue resposta;
                 resposta["erro"] = std::string("Falha ao validar token da Microsoft: ") + excecao.what();
-                return crow::response(401, resposta);
+                crow::response respostaHttp(401, resposta);
+                aplicarCabecalhosCors(respostaHttp);
+                return respostaHttp;
             }
         }
     );
@@ -118,6 +137,7 @@ void RotasAutenticacao::registrar(crow::SimpleApp& aplicacao) {
 
             crow::response respostaHttp(200, resposta);
             respostaHttp.add_header("Set-Cookie", CookieSessao::construirCabecalhoRemoverCookie());
+            aplicarCabecalhosCors(respostaHttp);
 
             return respostaHttp;
         }
@@ -131,7 +151,9 @@ void RotasAutenticacao::registrar(crow::SimpleApp& aplicacao) {
             if (tokenBruto.empty()) {
                 crow::json::wvalue resposta;
                 resposta["erro"] = "Nao autenticado";
-                return crow::response(401, resposta);
+                crow::response respostaHttp(401, resposta);
+                aplicarCabecalhosCors(respostaHttp);
+                return respostaHttp;
             }
 
             try {
@@ -141,7 +163,9 @@ void RotasAutenticacao::registrar(crow::SimpleApp& aplicacao) {
                 if (!usuario.has_value()) {
                     crow::json::wvalue resposta;
                     resposta["erro"] = "Sessao invalida ou expirada";
-                    return crow::response(401, resposta);
+                    crow::response respostaHttp(401, resposta);
+                    aplicarCabecalhosCors(respostaHttp);
+                    return respostaHttp;
                 }
 
                 crow::json::wvalue resposta;
@@ -150,11 +174,15 @@ void RotasAutenticacao::registrar(crow::SimpleApp& aplicacao) {
                 resposta["email"] = usuario.value().email;
                 resposta["papel"] = usuario.value().papel;
 
-                return crow::response(200, resposta);
+                crow::response respostaHttp(200, resposta);
+                aplicarCabecalhosCors(respostaHttp);
+                return respostaHttp;
             } catch (const std::exception& excecao) {
                 crow::json::wvalue resposta;
                 resposta["erro"] = std::string(excecao.what());
-                return crow::response(500, resposta);
+                crow::response respostaHttp(500, resposta);
+                aplicarCabecalhosCors(respostaHttp);
+                return respostaHttp;
             }
         }
     );

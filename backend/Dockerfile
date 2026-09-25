@@ -35,8 +35,8 @@ FROM ubuntu:24.04 AS runtime
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libpqxx-6.4 \
-    libboost-system1.83.0 \
+    libpqxx-dev \
+    libboost-system-dev \
     libssl3 \
     libcurl4 \
     ca-certificates \

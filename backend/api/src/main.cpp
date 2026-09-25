@@ -8,6 +8,18 @@
 int main() {
     crow::SimpleApp aplicacao;
 
+    // 1. Trata a requisição prévia OPTIONS (Preflight)
+    CROW_ROUTE(aplicacao, "/api/<path>").methods(crow::HTTPMethod::Options)
+    ([](const crow::request& req, crow::response& res) {
+        res.add_header("Access-Control-Allow-Origin", "https://rogeriogapski.github.io");
+        res.add_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        res.add_header("Access-Control-Allow-Headers", "Content-Type, Authorization, Cookie");
+        res.add_header("Access-Control-Allow-Credentials", "true");
+        res.code = 204;
+        res.end();
+    });
+
+    // 2. Registra suas rotas normalmente
     ensalamento_api::RotasAutenticacao::registrar(aplicacao);
     ensalamento_api::RotasEnsalamento::registrar(aplicacao);
     ensalamento_api::RotasCalendario::registrar(aplicacao);

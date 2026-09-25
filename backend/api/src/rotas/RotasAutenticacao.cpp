@@ -10,16 +10,9 @@
 
 namespace ensalamento_api {
 
-static void aplicarCabecalhosCors(crow::response& res) {
-    res.add_header("Access-Control-Allow-Origin", "https://rogeriogapski.github.io");
-    res.add_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    res.add_header("Access-Control-Allow-Headers", "Content-Type, Authorization, Cookie");
-    res.add_header("Access-Control-Allow-Credentials", "true");
-}
-
-static void tratarLoginComProvedor(DadosTokenValidado dadosToken, crow::response& res) {
-    aplicarCabecalhosCors(res);
+static crow::response tratarLoginComProvedor(DadosTokenValidado dadosToken) {
     std::unique_ptr<pqxx::connection> conexao = ConexaoBanco::abrirConexao();
+
     std::optional<UsuarioAutenticavel> usuarioExistente = RepositorioUsuarios::buscarPorEmail(*conexao, dadosToken.email);
 
     UsuarioAutenticavel usuario;
@@ -28,10 +21,7 @@ static void tratarLoginComProvedor(DadosTokenValidado dadosToken, crow::response
         if (!usuarioExistente.value().ativo) {
             crow::json::wvalue resposta;
             resposta["erro"] = "Conta desativada";
-            res.code = 403;
-            res.write(resposta.dump());
-            res.end();
-            return;
+            return crow::response(403, resposta);
         }
         usuario = usuarioExistente.value();
     } else if (RepositorioUsuarios::dominioPermitido(dadosToken.email)) {
@@ -39,10 +29,7 @@ static void tratarLoginComProvedor(DadosTokenValidado dadosToken, crow::response
     } else {
         crow::json::wvalue resposta;
         resposta["erro"] = "Conta nao autorizada a acessar o sistema";
-        res.code = 403;
-        res.write(resposta.dump());
-        res.end();
-        return;
+        return crow::response(403, resposta);
     }
 
     SessaoCriada sessaoCriada = GerenciadorSessao::criarSessao(*conexao, usuario.id);
@@ -59,137 +46,92 @@ static void tratarLoginComProvedor(DadosTokenValidado dadosToken, crow::response
     resposta["email"] = usuario.email;
     resposta["papel"] = usuario.papel;
 
-    res.code = 200;
-    res.add_header("Set-Cookie", CookieSessao::construirCabecalhoDefinirCookie(sessaoCriada.tokenBruto, horasValidade));
-    res.write(resposta.dump());
-    res.end();
+    crow::response respostaHttp(200, resposta);
+    respostaHttp.add_header("Set-Cookie", CookieSessao::construirCabecalhoDefinirCookie(sessaoCriada.tokenBruto, horasValidade));
+
+    return respostaHttp;
 }
 
-void RotasAutenticacao::registrar(crow::SimpleApp& aplicacao) {
+void RotasAutenticacao::registrar(AppComCors& aplicacao) {
     static ValidadorTokenGoogle validadorGoogle;
     static ValidadorTokenMicrosoft validadorMicrosoft;
 
-    CROW_ROUTE(aplicacao, "/api/auth/google").methods(crow::HTTPMethod::POST, crow::HTTPMethod::OPTIONS)(
-        [](const crow::request& req, crow::response& res) {
-            aplicarCabecalhosCors(res);
-
-            if (req.method == crow::HTTPMethod::OPTIONS) {
-                res.code = 204;
-                res.end();
-                return;
-            }
-
+    CROW_ROUTE(aplicacao, "/api/auth/google").methods(crow::HTTPMethod::POST)(
+        [](const crow::request& requisicao) {
             try {
-                crow::json::rvalue corpo = crow::json::load(req.body);
+                crow::json::rvalue corpo = crow::json::load(requisicao.body);
                 if (!corpo || !corpo.has("id_token")) {
-                    res.code = 400;
                     crow::json::wvalue resposta;
                     resposta["erro"] = "Campo id_token e obrigatorio";
-                    res.write(resposta.dump());
-                    res.end();
-                    return;
+                    return crow::response(400, resposta);
                 }
 
                 std::string idToken = corpo["id_token"].s();
                 DadosTokenValidado dadosToken = validadorGoogle.validar(idToken);
 
-                tratarLoginComProvedor(dadosToken, res);
+                return tratarLoginComProvedor(dadosToken);
             } catch (const std::exception& excecao) {
-                aplicarCabecalhosCors(res);
-                res.code = 401;
                 crow::json::wvalue resposta;
                 resposta["erro"] = std::string("Falha ao validar token do Google: ") + excecao.what();
-                res.write(resposta.dump());
-                res.end();
+                return crow::response(401, resposta);
             }
         }
     );
 
-    CROW_ROUTE(aplicacao, "/api/auth/microsoft").methods(crow::HTTPMethod::POST, crow::HTTPMethod::OPTIONS)(
-        [](const crow::request& req, crow::response& res) {
-            aplicarCabecalhosCors(res);
-
-            if (req.method == crow::HTTPMethod::OPTIONS) {
-                res.code = 204;
-                res.end();
-                return;
-            }
-
+    CROW_ROUTE(aplicacao, "/api/auth/microsoft").methods(crow::HTTPMethod::POST)(
+        [](const crow::request& requisicao) {
             try {
-                crow::json::rvalue corpo = crow::json::load(req.body);
+                crow::json::rvalue corpo = crow::json::load(requisicao.body);
                 if (!corpo || !corpo.has("id_token")) {
-                    res.code = 400;
                     crow::json::wvalue resposta;
                     resposta["erro"] = "Campo id_token e obrigatorio";
-                    res.write(resposta.dump());
-                    res.end();
-                    return;
+                    return crow::response(400, resposta);
                 }
 
                 std::string idToken = corpo["id_token"].s();
                 DadosTokenValidado dadosToken = validadorMicrosoft.validar(idToken);
 
-                tratarLoginComProvedor(dadosToken, res);
+                return tratarLoginComProvedor(dadosToken);
             } catch (const std::exception& excecao) {
-                aplicarCabecalhosCors(res);
-                res.code = 401;
                 crow::json::wvalue resposta;
                 resposta["erro"] = std::string("Falha ao validar token da Microsoft: ") + excecao.what();
-                res.write(resposta.dump());
-                res.end();
+                return crow::response(401, resposta);
             }
         }
     );
 
-    CROW_ROUTE(aplicacao, "/api/auth/logout").methods(crow::HTTPMethod::POST, crow::HTTPMethod::OPTIONS)(
-        [](const crow::request& req, crow::response& res) {
-            aplicarCabecalhosCors(res);
-
-            if (req.method == crow::HTTPMethod::OPTIONS) {
-                res.code = 204;
-                res.end();
-                return;
-            }
-
-            std::string cabecalhoCookie = req.get_header_value("Cookie");
+    CROW_ROUTE(aplicacao, "/api/auth/logout").methods(crow::HTTPMethod::POST)(
+        [](const crow::request& requisicao) {
+            std::string cabecalhoCookie = requisicao.get_header_value("Cookie");
             std::string tokenBruto = CookieSessao::extrairTokenDoCabecalhoCookie(cabecalhoCookie);
 
             if (!tokenBruto.empty()) {
                 try {
                     std::unique_ptr<pqxx::connection> conexao = ConexaoBanco::abrirConexao();
                     GerenciadorSessao::revogarSessao(*conexao, tokenBruto);
-                } catch (const std::exception&) {}
+                } catch (const std::exception&) {
+                }
             }
 
             crow::json::wvalue resposta;
             resposta["status"] = "sessao encerrada";
-            res.code = 200;
-            res.write(resposta.dump());
-            res.add_header("Set-Cookie", CookieSessao::construirCabecalhoRemoverCookie());
-            res.end();
+
+            crow::response respostaHttp(200, resposta);
+            respostaHttp.add_header("Set-Cookie", CookieSessao::construirCabecalhoRemoverCookie());
+
+            return respostaHttp;
         }
     );
 
-    CROW_ROUTE(aplicacao, "/api/auth/me").methods(crow::HTTPMethod::GET, crow::HTTPMethod::OPTIONS)(
-        [](const crow::request& req, crow::response& res) {
-            aplicarCabecalhosCors(res);
-
-            if (req.method == crow::HTTPMethod::OPTIONS) {
-                res.code = 204;
-                res.end();
-                return;
-            }
-
-            std::string cabecalhoCookie = req.get_header_value("Cookie");
+    CROW_ROUTE(aplicacao, "/api/auth/me").methods(crow::HTTPMethod::GET)(
+        [](const crow::request& requisicao) {
+            std::string cabecalhoCookie = requisicao.get_header_value("Cookie");
             std::string tokenBruto = CookieSessao::extrairTokenDoCabecalhoCookie(cabecalhoCookie);
 
             if (tokenBruto.empty()) {
-                res.code = 401;
                 crow::json::wvalue resposta;
                 resposta["erro"] = "Nao autenticado";
-                res.write(resposta.dump());
-                res.end();
-                return;
+                return crow::response(401, resposta);
             }
 
             try {
@@ -197,12 +139,9 @@ void RotasAutenticacao::registrar(crow::SimpleApp& aplicacao) {
                 std::optional<UsuarioDaSessao> usuario = GerenciadorSessao::validarSessao(*conexao, tokenBruto);
 
                 if (!usuario.has_value()) {
-                    res.code = 401;
                     crow::json::wvalue resposta;
                     resposta["erro"] = "Sessao invalida ou expirada";
-                    res.write(resposta.dump());
-                    res.end();
-                    return;
+                    return crow::response(401, resposta);
                 }
 
                 crow::json::wvalue resposta;
@@ -211,15 +150,11 @@ void RotasAutenticacao::registrar(crow::SimpleApp& aplicacao) {
                 resposta["email"] = usuario.value().email;
                 resposta["papel"] = usuario.value().papel;
 
-                res.code = 200;
-                res.write(resposta.dump());
-                res.end();
+                return crow::response(200, resposta);
             } catch (const std::exception& excecao) {
-                res.code = 500;
                 crow::json::wvalue resposta;
                 resposta["erro"] = std::string(excecao.what());
-                res.write(resposta.dump());
-                res.end();
+                return crow::response(500, resposta);
             }
         }
     );

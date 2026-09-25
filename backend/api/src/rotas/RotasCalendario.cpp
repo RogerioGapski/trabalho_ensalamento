@@ -8,7 +8,7 @@
 
 namespace ensalamento_api {
 
-void RotasCalendario::registrar(crow::SimpleApp& aplicacao) {
+void RotasCalendario::registrar(AppComCors& aplicacao) {
     CROW_ROUTE(aplicacao, "/api/calendario/chave").methods(crow::HTTPMethod::GET)(
         [](const crow::request& requisicao) {
             std::string cabecalhoCookie = requisicao.get_header_value("Cookie");

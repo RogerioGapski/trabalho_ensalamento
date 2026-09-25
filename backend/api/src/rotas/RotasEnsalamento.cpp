@@ -42,7 +42,7 @@ static ensalamento::ConfiguracaoIndiceAdequacao construirConfiguracaoAPartirDoCo
     return configuracao;
 }
 
-void RotasEnsalamento::registrar(crow::SimpleApp& aplicacao) {
+void RotasEnsalamento::registrar(AppComCors& aplicacao) {
     CROW_ROUTE(aplicacao, "/api/saude").methods(crow::HTTPMethod::GET)(
         [](const crow::request&) {
             crow::json::wvalue resposta;
